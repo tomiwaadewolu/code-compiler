@@ -43,6 +43,37 @@ function App() {
         <h1>Code Compiler</h1>
       </header>
 
+      <div className="main-container">
+        {/* Left container: Code Editor */}
+        <div className="code-editor-container">
+          <Editor
+            height="100%"
+            language={language}
+            value={code}
+            onChange={(value) => setCode(value)}
+          />
+        </div>
+
+        {/* Right container: Split between Input & Output */}
+        <div className="right-container">
+          {/* Input Container */}
+          <div className="input-container">
+            <textarea
+              placeholder="Enter input here..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              style={{ width: '100%', height: '100%', padding: '10px' }}
+            />
+          </div>
+
+          {/* Output Container */}
+          <div className="output-container">
+            <h4>Output:</h4>
+            <pre>{output}</pre>
+          </div>
+        </div>
+      </div>
+
       {/* Language Selector */}
       <select value={language} onChange={handleLanguageChange}>
         <option value="python">Python</option>
@@ -51,32 +82,10 @@ function App() {
         <option value="cpp">C++</option>
       </select>
 
-      {/* Monaco Code Editor */}
-      <Editor
-        height="400px"
-        language={language}
-        value={code}
-        onChange={(value) => setCode(value)}
-      />
-
-      {/* Input Box for providing stdin */}
-      <textarea
-        placeholder="Enter input here..."
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        style={{ width: '100%', height: '100px', marginTop: '20px', padding: '10px' }}
-      />
-
       {/* Compile Button */}
       <button onClick={submitCode} disabled={isLoading} style={{ marginTop: '20px', padding: '10px 20px' }}>
         {isLoading ? 'Compiling...' : 'Compile Code'}
       </button>
-
-      {/* Output Display */}
-      <div style={{ marginTop: '20px', width: '100%', height: '200px', overflowY: 'scroll', backgroundColor: '#f4f4f4', padding: '10px' }}>
-        <h4>Output:</h4>
-        <pre>{output}</pre>
-      </div>
     </div>
   );
 }
