@@ -2,6 +2,16 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## How to Run the Code Compiler
+
+1. Open a terminal window
+2. Navigate to the server directory
+3. Enter `node index.js`
+4. Open a second terminal window
+5. Navigate to the code-compiler directory
+6. Enter `npm start`
+7. Open your browser and go to http://localhost:3000/
+
 ## Available Scripts
 
 In the project directory, you can run:
