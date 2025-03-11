@@ -43,6 +43,16 @@ function App() {
         <h1>Code Compiler</h1>
       </header>
 
+      {/* Language Selector at the Top */}
+      <div className="language-selector-container">
+        <select value={language} onChange={handleLanguageChange}>
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+          <option value="c">C</option>
+          <option value="cpp">C++</option>
+        </select>
+      </div>
+
       <div className="main-container">
         {/* Left container: Code Editor */}
         <div className="code-editor-container">
@@ -74,16 +84,8 @@ function App() {
         </div>
       </div>
 
-      {/* Language Selector */}
-      <select value={language} onChange={handleLanguageChange}>
-        <option value="python">Python</option>
-        <option value="java">Java</option>
-        <option value="c">C</option>
-        <option value="cpp">C++</option>
-      </select>
-
       {/* Compile Button */}
-      <button onClick={submitCode} disabled={isLoading} style={{ marginTop: '20px', padding: '10px 20px' }}>
+      <button onClick={submitCode} disabled={isLoading} style={{ marginTop: '20px' }}>
         {isLoading ? 'Compiling...' : 'Compile Code'}
       </button>
     </div>

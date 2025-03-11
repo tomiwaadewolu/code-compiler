@@ -11,9 +11,31 @@
   color: white;
 }
 
+.language-selector-container {
+  margin-top: 20px;
+  margin-bottom: 20px; /* Added margin-bottom to create space below the language selector */
+  display: flex;
+  justify-content: center;
+}
+
+.language-selector-container select {
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #333;
+  color: white;
+  border: 1px solid #444;
+  transition: border-color 0.3s ease;
+}
+
+.language-selector-container select:hover {
+  border-color: #1f65e6;
+}
+
 .main-container {
   display: flex;
-  height: calc(100vh - 100px); /* Subtract the header height */
+  height: calc(100vh - 160px); /* Subtract the header height and selector area */
 }
 
 .code-editor-container {
@@ -57,7 +79,7 @@
 
 button {
   margin-top: 20px;
-  padding: 8px 16px;
+  padding: 5px 12px; /* Smaller padding for a sleeker button */
   background-color: #1f65e6;
   color: white;
   font-weight: bold;
@@ -65,7 +87,7 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-size: 16px;
+  font-size: 14px; /* Smaller font size */
 }
 
 button:hover {
@@ -75,22 +97,6 @@ button:hover {
 button:disabled {
   background-color: #7f7f7f;
   cursor: not-allowed;
-}
-
-select {
-  margin-top: 10px;
-  padding: 6px 12px;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #333;
-  color: white;
-  border: 1px solid #444;
-  transition: border-color 0.3s ease;
-}
-
-select:hover {
-  border-color: #1f65e6;
 }
 
 h4 {
