@@ -1,12 +1,14 @@
+/* General Styles */ 
 .App {
   text-align: center;
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #f0f0f0; /* Light grey background */
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #9b4dca; /* Purple header */
   padding: 20px;
   color: white;
 }
@@ -23,16 +25,17 @@
   font-size: 14px;
   border-radius: 4px;
   cursor: pointer;
-  background-color: #333;
-  color: white;
-  border: 1px solid #444;
+  background-color: #f7d8eb; /* Light pink background for the selector */
+  color: #9b4dca; /* Purple text */
+  border: 1px solid #9b4dca; /* Purple border */
   transition: border-color 0.3s ease;
 }
 
 .language-selector-container select:hover {
-  border-color: #1f65e6;
+  border-color: #c774e3; /* Lighter purple hover border */
 }
 
+/* Main Layout */
 .main-container {
   display: flex;
   height: calc(100vh - 160px); /* Subtract the header height and selector area */
@@ -41,7 +44,7 @@
 .code-editor-container {
   flex: 50%; /* 50% width for the code editor */
   height: 100%;
-  background-color: #1e1e1e;
+  background-color: #ffffff; /* White background for editor */
 }
 
 .right-container {
@@ -52,17 +55,18 @@
 
 .input-container {
   flex: 1; /* 50% of the right side */
-  background-color: #242424;
+  background-color: #f7d8eb; /* Light pink background */
   padding: 10px;
-  color: white;
+  color: #9b4dca; /* Purple text */
+  border-bottom: 2px solid #9b4dca; /* Added a purple border to demarcate input and output */
 }
 
 .input-container textarea {
   width: 100%;
   height: 100%;
-  background-color: #333;
-  color: white;
-  border: none;
+  background-color: #f0f0f0; /* Light grey background */
+  color: #9b4dca; /* Purple text */
+  border: 1px solid #f7d8eb; /* Light pink border */
   font-family: monospace;
   padding: 10px;
   resize: none;
@@ -70,35 +74,43 @@
 
 .output-container {
   flex: 1; /* 50% of the right side */
-  background-color: #242424;
+  background-color: #f0f0f0; /* Light grey */
   padding: 10px;
-  color: white;
+  color: #9b4dca; /* Purple text */
   overflow-y: auto;
   font-family: monospace;
 }
 
+/* Compile Button */
 button {
   margin-top: 20px;
-  padding: 5px 12px; /* Smaller padding for a sleeker button */
-  background-color: #1f65e6;
+  padding: 5px 10px; /* Adjusted to match the language selector's padding */
+  font-size: 14px; /* Matching the font size of the language selector */
+  background-color: #9b4dca; /* Purple button */
   color: white;
   font-weight: bold;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-size: 14px; /* Smaller font size */
+  width: auto; /* Set width to auto so it adjusts based on text */
+  min-width: 120px; /* Added min-width for consistency in size */
 }
 
 button:hover {
-  background-color: #0f4fa8;
+  background-color: #7a3fa1; /* Darker purple on hover */
 }
 
 button:disabled {
-  background-color: #7f7f7f;
+  background-color: #b3b3b3;
   cursor: not-allowed;
 }
 
+/* Heading */
 h4 {
-  color: #afec3f;
+  color: #9b4dca; /* Purple output heading */
+}
+
+h1 {
+  color: #ffffff; /* White heading text */
 }
