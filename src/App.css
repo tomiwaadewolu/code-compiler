@@ -9,13 +9,14 @@
 
 .App-header {
   background-color: #9b4dca; /* Purple header */
-  padding: 20px;
+  padding: 1px; /* Reduced padding to make the header smaller */
   color: white;
+  font-size: 15px; /* Reduced font size for a smaller header */
 }
 
 .language-selector-container {
-  margin-top: 20px;
-  margin-bottom: 20px; /* Added margin-bottom to create space below the language selector */
+  margin-top: 5px;
+  margin-bottom: 5px; /* Added margin-bottom to create space below the language selector */
   display: flex;
   justify-content: center;
 }
@@ -42,7 +43,7 @@
 }
 
 .code-editor-container {
-  flex: 50%; /* 50% width for the code editor */
+  flex: 60%; /* 50% width for the code editor */
   height: 100%;
   background-color: #ffffff; /* White background for editor */
 }
@@ -50,7 +51,7 @@
 .right-container {
   display: flex;
   flex-direction: column;
-  flex: 50%; /* 50% width for the input/output area */
+  flex: 40%; /* 50% width for the input/output area */
 }
 
 .input-container {
@@ -83,19 +84,23 @@
 
 /* Compile Button */
 button {
-  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Ensures text inside is centered */
+  margin: 20px auto; /* Centers the button horizontally */
   padding: 5px 10px; /* Adjusted to match the language selector's padding */
   font-size: 14px; /* Matching the font size of the language selector */
   background-color: #9b4dca; /* Purple button */
   color: white;
   font-weight: bold;
   border: none;
-  border-radius: 4px;
+  border-radius: 1px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: auto; /* Set width to auto so it adjusts based on text */
-  min-width: 120px; /* Added min-width for consistency in size */
+  width: 15%; /* Keeps the width relative */
+  min-width: 120px; /* Ensures consistency in size */
 }
+
 
 button:hover {
   background-color: #7a3fa1; /* Darker purple on hover */
