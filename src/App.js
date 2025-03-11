@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Editor } from '@monaco-editor/react'; // Import the Editor component from monaco-editor
+import { Editor } from '@monaco-editor/react'; // Monaco Editor
 import axios from 'axios';
 
 function App() {
@@ -20,11 +20,14 @@ function App() {
   const submitCode = async () => {
     setIsLoading(true); // Start loading indicator
     try {
+      console.log('Sending request to backend...');
       const response = await axios.post('http://localhost:8000/compile', {
         code: code,
         language: language,
         input: input,
       });
+
+      console.log('Response received:', response.data);
       setOutput(response.data.output || response.data.error); // Set the output from the response
     } catch (error) {
       console.error("Error compiling code:", error);
@@ -39,7 +42,7 @@ function App() {
       <header className="App-header">
         <h1>Code Compiler</h1>
       </header>
-      
+
       {/* Language Selector */}
       <select value={language} onChange={handleLanguageChange}>
         <option value="python">Python</option>
@@ -47,7 +50,7 @@ function App() {
         <option value="c">C</option>
         <option value="cpp">C++</option>
       </select>
-      
+
       {/* Monaco Code Editor */}
       <Editor
         height="400px"
