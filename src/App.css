@@ -55,23 +55,37 @@
 }
 
 .input-container {
-  flex: 1; /* 50% of the right side */
+  flex: 1; /* Takes 50% of the right side */
   background-color: #f7d8eb; /* Light pink background */
-  padding: 10px;
+  padding: 15px;
   color: #9b4dca; /* Purple text */
-  border-bottom: 2px solid #9b4dca; /* Added a purple border to demarcate input and output */
+  border-bottom: 2px solid #9b4dca; /* Added bottom border */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center the input box vertically */
+  align-items: center; /* Center horizontally */
 }
 
-.input-container textarea {
+.input-box {
+  width: 90%;
+  background-color: #ffffff; /* White background for contrast */
+  border: 2px solid #9b4dca; /* Purple border */
+  padding: 10px;
+  border-radius: 5px; /* Rounded corners */
+}
+
+.input-box textarea {
   width: 100%;
-  height: 100%;
+  height: 100px; /* Adjust height as needed */
   background-color: #f0f0f0; /* Light grey background */
   color: #9b4dca; /* Purple text */
-  border: 1px solid #f7d8eb; /* Light pink border */
+  border: none;
   font-family: monospace;
   padding: 10px;
   resize: none;
+  outline: none; /* Removes default focus outline */
 }
+
 
 .output-container {
   flex: 1; /* 50% of the right side */
@@ -87,20 +101,19 @@ button {
   display: flex;
   justify-content: center;
   align-items: center; /* Ensures text inside is centered */
-  margin: 20px auto; /* Centers the button horizontally */
+  margin: 10px auto; /* Centers the button horizontally */
   padding: 5px 10px; /* Adjusted to match the language selector's padding */
   font-size: 14px; /* Matching the font size of the language selector */
   background-color: #9b4dca; /* Purple button */
   color: white;
   font-weight: bold;
   border: none;
-  border-radius: 1px;
+  border-radius: 6px; /* Increased to make it more rounded */
   cursor: pointer;
   transition: background-color 0.3s ease;
   width: 15%; /* Keeps the width relative */
   min-width: 120px; /* Ensures consistency in size */
 }
-
 
 button:hover {
   background-color: #7a3fa1; /* Darker purple on hover */
@@ -110,6 +123,7 @@ button:disabled {
   background-color: #b3b3b3;
   cursor: not-allowed;
 }
+
 
 /* Heading */
 h4 {
