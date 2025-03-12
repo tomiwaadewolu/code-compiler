@@ -12,7 +12,7 @@ Ensure you have the following installed on your system:
 
 - [npm](https://www.npmjs.com/)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-- This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). -->
 
 ## How to Run the Code Compiler
 
@@ -32,6 +32,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 7. Enter `serve -s build`
 8. Open your browser and go to http://localhost:3000/
 
+<!--
 ## Available Scripts
 
 In the project directory, you can run:
@@ -98,3 +99,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-->
