@@ -1,15 +1,27 @@
 # Code Compiler
 
-This project compiles code in Python, C, C++, and Java.
+This project is a web-based code compiler that supports Python, C, C++, and Java. It allows users to write and execute code in a browser-based editor. The frontend is built using React.js, while the backend is powered by Express.js.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🚀 Getting Started
+
+### Prerequisites
+
+Ensure you have the following installed on your system:
+
+- [Node.js](https://nodejs.org/en)
+
+- [npm](https://www.npmjs.com/)
+
+<!-- This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). -->
 
 ## How to Run the Code Compiler
 
-Necessary npm installs:
+### Required npm Packages:
 - `npm install @monaco-editor/react axios react-select`
 - `npm install express cors axios`
 - `npm install -g serve`
+
+### Steps to Run the Code Compiler
 
 1. Open a terminal window
 2. Navigate to the server directory
@@ -20,6 +32,7 @@ Necessary npm installs:
 7. Enter `serve -s build`
 8. Open your browser and go to http://localhost:3000/
 
+<!--
 ## Available Scripts
 
 In the project directory, you can run:
@@ -86,3 +99,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-->
