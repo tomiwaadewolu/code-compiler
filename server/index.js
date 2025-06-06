@@ -9,11 +9,19 @@ const PORT = 8000;
 app.use(cors());
 app.use(express.json());
 
+// default code per language
+const defaultCode = {
+    "c": `#include <stdio.h>\nint main() {\n    printf("Hello, C!");\n    return 0;\n}\n`,
+    "cpp": `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, C++!" << endl;\n    return 0;\n}\n`,
+    "python": `print("Hello, Python!")\n`,
+    "java": `public class Main {\n    public static void main(String[] args) {\n       System.out.println("Hello, Java!");\n    }\n}\n`
+};
+
 app.post("/compile", (req, res) => {
     // getting the required data from the request
-    let code = req.body.code;
-    let language = req.body.language;
-    let input = req.body.input;
+    let code = req.body.code?.trim() || "";
+    let language = req.body.language?.toLowerCase();
+    let input = req.body.input || "";
 
     let languageMap = {
         "c": { language: "c", version: "10.2.0" },
@@ -26,19 +34,21 @@ app.post("/compile", (req, res) => {
         return res.status(400).send({ error: "Unsupported language" });
     }
 
-    let data = {
+    const finalCode = code.length > 0 ? code : defaultCode[language];
+
+    const data = {
         "language": languageMap[language].language,
         "version": languageMap[language].version,
         "files": [
             {
                 "name": "main",
-                "content": code
+                "content": finalCode
             }
         ],
         "stdin": input
     };
 
-    let config = {
+    const config = {
         method: 'post',
         url: 'https://emkc.org/api/v2/piston/execute',
         headers: {

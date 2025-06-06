@@ -3,9 +3,17 @@ import './App.css';
 import { Editor } from '@monaco-editor/react'; // Monaco Editor
 import axios from 'axios';
 
+const defaultCode = {
+  c: `#include <stdio.h>\nint main() {\n    printf("Hello, C!");\n    return 0;\n}\n`,
+  cpp: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, C++!" << endl;\n    return 0;\n}\n`,
+  python: `print("Hello, Python!")\n`,
+  java: `public class Main {\n    public static void main(String[] args) {\n       System.out.println("Hello, Java!");\n    }\n}\n`
+};
+
+
 function App() {
   // State to store code, language, input, and results
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(defaultCode['python']);
   const [language, setLanguage] = useState('python');
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
@@ -13,12 +21,26 @@ function App() {
 
   // Function to handle language change
   const handleLanguageChange = (event) => {
-    setLanguage(event.target.value);
+    const selectedLang = event.target.value;
+    setLanguage(selectedLang);
+    setCode(defaultCode[selectedLang]);
+
+    // Set default code only if code editor is empty
+    if (!code.trim()) {
+      setCode(defaultCode[selectedLang]);
+    }
   };
 
   // Function to handle the submit (compile) action
   const submitCode = async () => {
+    // Check if code is empty
+    if (!code.trim()) {
+      setOutput("⚠️ No code in the editor.\n⚠️ Please write code or select a language to load default code.");
+      return;
+    }
+
     setIsLoading(true); // Start loading indicator
+
     try {
       console.log('Sending request to backend...');
       const response = await axios.post('http://localhost:8000/compile', {
@@ -36,6 +58,7 @@ function App() {
       setIsLoading(false); // Stop loading indicator
     }
   };
+
 
   return (
     <div className="App">
