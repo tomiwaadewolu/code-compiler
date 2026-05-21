@@ -1,10 +1,12 @@
 //index.js
 
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const Axios = require("axios");
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
@@ -17,57 +19,53 @@ const defaultCode = {
     "java": `public class Main {\n    public static void main(String[] args) {\n       System.out.println("Hello, Java!");\n    }\n}\n`
 };
 
-app.post("/compile", (req, res) => {
-    // getting the required data from the request
-    let code = req.body.code?.trim() || "";
-    let language = req.body.language?.toLowerCase();
-    let input = req.body.input || "";
+app.post("/compile", async (req, res) => {
+    try {
+        let code = req.body.code?.trim() || "";
+        let language = req.body.language?.toLowerCase();
+        let input = req.body.input || "";
 
-    let languageMap = {
-        "c": { language: "c", version: "10.2.0" },
-        "cpp": { language: "c++", version: "10.2.0" },
-        "python": { language: "python", version: "3.10.0" },
-        "java": { language: "java", version: "15.0.2" }
-    };
+        const languageMap = {
+            python: 71,
+            cpp: 54,
+            c: 50,
+            java: 62
+        };
 
-    if (!languageMap[language]) {
-        return res.status(400).send({ error: "Unsupported language" });
-    }
+        if (!languageMap[language]) {
+            return res.status(400).send({ error: "Unsupported language" });
+        }
 
-    const finalCode = code.length > 0 ? code : defaultCode[language];
-
-    const data = {
-        "language": languageMap[language].language,
-        "version": languageMap[language].version,
-        "files": [
-            {
-                "name": "main",
-                "content": finalCode
+        const options = {
+            method: "POST",
+            url: "http://localhost:2358/submissions?base64_encoded=false&wait=true",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: {
+                source_code: code,
+                language_id: languageMap[language],
+                stdin: input
             }
-        ],
-        "stdin": input
-    };
+        };
 
-    const config = {
-        method: 'post',
-        url: 'https://emkc.org/api/v2/piston/execute',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        data: data
-    };
+        const response = await Axios.request(options);
 
-    // calling the code compilation API
-    Axios(config)
-        .then((response) => {
-            res.json(response.data.run);  // Send the run object directly
-            console.log(response.data);
-        }).catch((error) => {
-            console.log(error);
-            res.status(500).send({ error: "Something went wrong" });
+        const result = response.data;
+
+        res.json({
+            output: result.stdout,
+            stderr: result.stderr,
+            compile_output: result.compile_output,
+            status: result.status
         });
+
+    } catch (error) {
+        console.log("Judge0 Error:", error.response?.data || error.message);
+        res.status(500).json({ error: "Execution failed" });
+    }
 });
 
 app.listen(process.env.PORT || PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+    console.log(`Server listening on port ${process.env.PORT || 8000}`);
 });

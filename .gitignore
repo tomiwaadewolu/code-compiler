@@ -1,23 +1,66 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# =========================
+# DEPENDENCIES
+# =========================
+node_modules/
+**/node_modules/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# =========================
+# ENV FILES
+# =========================
+.env
+.env.*
+!.env.example
 
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
+# =========================
+# LOGS
+# =========================
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# TESTING
+# =========================
+coverage/
+
+# =========================
+# BUILD OUTPUTS
+# =========================
+build/
+dist/
+web/build/
+
+# =========================
+# OS FILES
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# EXPO / REACT NATIVE (IMPORTANT)
+# =========================
+.expo/
+.expo-shared/
+mobile/.expo/
+mobile/.expo-shared/
+
+# Metro bundler cache
+*.tsbuildinfo
+
+# =========================
+# CLAUDE / AI TOOLS
+# =========================
+.claude/
+mobile/.claude/
+
+# =========================
+# OPTIONAL (safe to ignore)
+# =========================
+*.log
