@@ -1,102 +1,153 @@
-# Code Compiler
+# Code Compiler (Web + Mobile IDE)
 
-This project is a web-based code compiler that supports Python, C, C++, and Java. It allows users to write and execute code in a browser-based editor. The frontend is built using React.js, while the backend is powered by Express.js.
+This project is a full-stack **multi-platform code compiler and IDE** that supports Python, C, C++, and Java.
 
-## 🚀 Getting Started
+It includes:
+- Web-based code compiler (React)
+- Mobile IDE (Expo React Native)
+- Monaco Editor (VS Code-like experience on mobile)
+- Judge0 backend (Docker-based execution engine)
 
-### Prerequisites
+Users can write, edit, and execute code from both web and mobile interfaces.
 
-Ensure you have the following installed on your system:
+---
 
-- [Node.js](https://nodejs.org/en)
+# Features
 
-- [npm](https://www.npmjs.com/)
+## Web App
+- Code editor with language support (Python, C, C++, Java)
+- REST API-based execution backend
+- Simple browser-based interface
 
-<!-- This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). -->
+## Mobile App (Expo React Native)
+- VS Code-style mobile IDE
+- Monaco Editor inside WebView
+- Custom floating language selector (replaces Picker)
+- Run & fullscreen editor modes
+- Clean toolbar UI optimized for mobile
 
-## How to Run the Code Compiler
+## Editor (Monaco)
+- Syntax highlighting
+- Real-time code editing
+- Stable WebView integration (no flickering)
+- Controlled React Native ↔ WebView messaging system
 
-### Required npm Packages:
-- `npm install @monaco-editor/react axios react-select`
-- `npm install express cors axios`
-- `npm install -g serve`
+## Execution Backend
+- Migrated from Piston API → **Judge0**
+- Docker-based execution environment
+- Stable and production-ready code execution
+- No external API instability or 401 issues
 
-### Steps to Run the Code Compiler
+---
 
-1. Open a terminal window
-2. Navigate to the server directory
-3. Enter `node index.js`
-4. Open a second terminal window
-5. Navigate to the code-compiler directory
-6. Enter `npm run build`
-7. Enter `serve -s build`
-8. Open your browser and go to http://localhost:3000/
+# Backend Architecture (Judge0)
 
-<!--
-## Available Scripts
+The backend now uses **Judge0 CE (self-hosted via Docker recommended)**:
 
-In the project directory, you can run:
+### Why Judge0?
+- More stable than Piston API
+- Fully customizable
+- No API rate limits
+- Production-ready sandbox execution
 
-### `npm start`
+### Recommended Setup
+- Docker-based Judge0 instance
+- Express.js wrapper API (`/compile`)
+- Language mapping handled server-side
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Getting Started
 
-### `npm test`
+## Prerequisites
+Ensure you have installed:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js
+- npm
+- Docker (for Judge0 backend)
+- Expo Go (for mobile testing)
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 1. Clone repository
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+git clone https://github.com/tomiwaadewolu/code-compiler.git
+cd code-compiler
+npm install
+```
 
-### `npm run eject`
+## 2. Backend Setup (Judge0 / Express)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+cd server
+npm install
+node index.js
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Ensure Judge0 (Docker or API) is running before starting server.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 3. Web App
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+cd web
+npm install
+npm start
+```
 
-## Learn More
+## 4. Mobile App (Expo)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+cd mobile
+npm install
+npx expo start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Scan QR code using Expo Go app.
 
-### Code Splitting
+# Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```
+code-compiler/
+  server/        # Express backend (Judge0 integration)
+  web/           # React web IDE
+  mobile/        # Expo React Native mobile IDE
+  public/        # Web static assets
+  README.md
+  .gitignore
+```
 
-### Analyzing the Bundle Size
+# Key Technical Improvements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Mobile IDE Upgrade
+- Replaced native Picker with custom dropdown modal
+- Fixed UI overlap issues in toolbar
+- Added fullscreen editor mode
+- Improved mobile layout stability
 
-### Making a Progressive Web App
+## Monaco Stability Fix
+- Removed re-render loop issues in WebView
+- Added guarded messaging between RN ↔ Monaco
+- Prevented editor flickering on keystrokes
+- Stable single-instance Monaco lifecycle
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Backend Migration
+- Switched from Piston API → Judge0
+- Improved execution reliability
+- Removed external API instability (401 issues)
+- Docker-ready architecture for production use
 
-### Advanced Configuration
+# Supported Languages
+- Python
+- C
+- C++
+- Java
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
--->
+# Future Improvements
+- Multi-file project support
+- File explorer sidebar (VS Code style)
+- Terminal panel (live output streaming)
+- Authentication + user workspace
+- Cloud save for code snippets
