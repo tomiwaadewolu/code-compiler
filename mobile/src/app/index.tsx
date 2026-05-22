@@ -1,7 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator } from "react-native";
 import axios from "axios";
 import CodeEditor from "../components/code-editor";
+import { ModernButton } from "../components/modern-button";
+import { ModernCard } from "../components/modern-card";
+import { ModernDropdown } from "../components/modern-dropdown";
+import { useTheme } from "@/hooks/use-theme";
+import { BorderRadius, FontSize, FontWeight, Shadow, Spacing } from "@/constants/theme";
 
 const SERVER_URL = "http://192.168.0.144:8000/compile";
 
@@ -15,13 +20,12 @@ const runCode = async (code: string, language: string) => {
 };
 
 export default function HomeScreen() {
+  const theme = useTheme();
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("python");
   const [output, setOutput] = useState("");
   const [fullscreen, setFullscreen] = useState(false);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-
-  // 🔥 ADDED: prevent unnecessary language re-sync loops
+  const [loading, setLoading] = useState(false);
   const prevLanguage = useRef(language);
 
   useEffect(() => {
@@ -30,10 +34,22 @@ export default function HomeScreen() {
     }
   }, [language]);
 
+  const languages = [
+    { label: "Python", value: "python" },
+    { label: "C++", value: "cpp" },
+    { label: "Java", value: "java" },
+    { label: "C", value: "c" },
+  ];
+
   const handleRun = async () => {
+    if (!code.trim()) {
+      setOutput("Please enter some code to run");
+      return;
+    }
+
+    setLoading(true);
     try {
       const result = await runCode(code, language);
-
       setOutput(
         result.output ||
           result.stdout ||
@@ -41,211 +57,204 @@ export default function HomeScreen() {
           JSON.stringify(result)
       );
     } catch (error) {
-      console.log(error);
-      setOutput("Error running code");
+      setOutput("Error running code. Check your server connection.");
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (fullscreen) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <View style={styles.fullscreenHeader}>
+          <Text style={[styles.fullscreenTitle, { color: theme.text }]}>
+            Code Editor
+          </Text>
+          <ModernButton
+            title="Exit Fullscreen"
+            variant="outline"
+            size="sm"
+            onPress={() => setFullscreen(false)}
+          />
+        </View>
+        <View style={styles.editorFull}>
+          <CodeEditor code={code} language={language} onChange={setCode} />
+        </View>
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: theme.background }]}
+      contentContainerStyle={styles.contentContainer}
+      showsVerticalScrollIndicator={false}>
+      {/* HEADER */}
+      <View style={styles.header}>
+        <Text style={[styles.title, { color: theme.text }]}>
+          Mobile Code
+        </Text>
+        <Text style={[styles.title, { color: theme.accent }]}>
+          Compiler
+        </Text>
+        <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
+          Write and execute code on the go
+        </Text>
+      </View>
 
-      <Text style={styles.title}>Mobile Code Compiler</Text>
-
-      {/* 🔥 DROPDOWN */}
-      {dropdownVisible && (
-        <View style={styles.dropdownOverlay}>
-
-          <View style={styles.dropdownBox}>
-
-            <Text
-              style={styles.dropdownItem}
-              onPress={() => {
-                setLanguage("python");
-                setDropdownVisible(false);
-              }}
-            >
-              Python
+      {/* CONTROLS CARD */}
+      <ModernCard style={styles.controlsCard}>
+        <View style={styles.controlsGrid}>
+          <View style={styles.controlItem}>
+            <Text style={[styles.controlLabel, { color: theme.textSecondary }]}>
+              Language
             </Text>
-
-            <Text
-              style={styles.dropdownItem}
-              onPress={() => {
-                setLanguage("cpp");
-                setDropdownVisible(false);
-              }}
-            >
-              C++
-            </Text>
-
-            <Text
-              style={styles.dropdownItem}
-              onPress={() => {
-                setLanguage("java");
-                setDropdownVisible(false);
-              }}
-            >
-              Java
-            </Text>
-
-            <Text
-              style={styles.dropdownItem}
-              onPress={() => {
-                setLanguage("c");
-                setDropdownVisible(false);
-              }}
-            >
-              C
-            </Text>
-
+            <ModernDropdown
+              options={languages}
+              value={language}
+              onChange={setLanguage}
+              style={styles.dropdown}
+            />
           </View>
-
-          {/* backdrop */}
-          <View
-            style={styles.dropdownBackdrop}
-            onTouchStart={() => setDropdownVisible(false)}
-          />
-
         </View>
+
+        <View style={styles.actionButtons}>
+          <ModernButton
+            title={loading ? "Running..." : "▶ Run Code"}
+            variant="primary"
+            size="md"
+            fullWidth
+            disabled={loading || !code.trim()}
+            onPress={handleRun}
+          />
+          <ModernButton
+            title="📄 Fullscreen"
+            variant="secondary"
+            size="md"
+            fullWidth
+            onPress={() => setFullscreen(true)}
+          />
+        </View>
+      </ModernCard>
+
+      {/* EDITOR CARD */}
+      <ModernCard style={styles.editorCard} noPadding elevated>
+        <View style={styles.editorContainer}>
+          <CodeEditor
+            code={code}
+            language={language}
+            onChange={setCode}
+          />
+        </View>
+      </ModernCard>
+
+      {/* OUTPUT CARD */}
+      {output && (
+        <ModernCard style={styles.outputCard}>
+          <Text style={[styles.outputTitle, { color: theme.accent }]}>
+            Output
+          </Text>
+          <View style={[styles.outputBox, { backgroundColor: theme.background }]}>
+            <Text style={[styles.outputText, { color: theme.text }]}>
+              {output}
+            </Text>
+          </View>
+        </ModernCard>
       )}
 
-      {/* 🔥 TOOLBAR */}
-      <View style={styles.editorHeader}>
-
-        {/* LANGUAGE BUTTON */}
-        <View style={styles.languageWrapper}>
-          <Button
-            title={language.toUpperCase()}
-            onPress={() => setDropdownVisible(true)}
-          />
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.accent} />
         </View>
-
-        {/* RUN */}
-        <View style={styles.buttonWrapper}>
-          <Button title="Run" onPress={handleRun} />
-        </View>
-
-        {/* FULLSCREEN */}
-        <View style={styles.buttonWrapper}>
-          <Button
-            title={fullscreen ? "Exit" : "Full"}
-            onPress={() => setFullscreen(!fullscreen)}
-          />
-        </View>
-
-      </View>
-
-      {/* 🔥 EDITOR */}
-      <View style={fullscreen ? styles.editorFull : styles.editorBox}>
-        <CodeEditor
-          code={code}
-          language={language}
-          onChange={setCode}
-        />
-      </View>
-
-      {/* OUTPUT */}
-      {!fullscreen && (
-        <>
-          <Text style={styles.outputTitle}>Output:</Text>
-          <Text style={styles.output}>{output}</Text>
-        </>
       )}
-
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 12,
-    paddingTop: 50,
   },
-
+  contentContainer: {
+    padding: Spacing.lg,
+    paddingTop: Spacing.xl,
+  },
+  header: {
+    marginBottom: Spacing.xxxl,
+  },
   title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 10,
+    fontSize: FontSize.hero,
+    fontWeight: FontWeight.bold,
+    marginBottom: Spacing.sm,
   },
-
-  /* 🔥 TOOLBAR */
-  editorHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#1e1e1e",
-    padding: 6,
-    borderRadius: 8,
-    marginBottom: 10,
-    height: 50,
-    overflow: "hidden",
+  subtitle: {
+    fontSize: FontSize.md,
+    fontWeight: FontWeight.normal,
+    marginTop: Spacing.sm,
   },
-
-  /* 🔥 LANGUAGE BUTTON */
-  languageWrapper: {
-    width: 110,
-    justifyContent: "center",
+  controlsCard: {
+    marginBottom: Spacing.lg,
   },
-
-  buttonWrapper: {
-    marginLeft: 6,
-    justifyContent: "center",
+  controlsGrid: {
+    marginBottom: Spacing.lg,
   },
-
-  /* 🔥 DROPDOWN */
-  dropdownOverlay: {
-    position: "absolute",
-    top: 110,
-    left: 12,
-    right: 12,
-    zIndex: 9999,
+  controlItem: {
+    marginBottom: Spacing.md,
   },
-
-  dropdownBox: {
-    backgroundColor: "#1e1e1e",
-    borderRadius: 8,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: "#333",
+  controlLabel: {
+    fontSize: FontSize.sm,
+    fontWeight: FontWeight.semibold,
+    marginBottom: Spacing.sm,
   },
-
-  dropdownItem: {
-    color: "#fff",
-    padding: 12,
-    fontSize: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: "#333",
+  dropdown: {
+    width: "100%",
   },
-
-  dropdownBackdrop: {
-    position: "absolute",
-    top: -200,
-    left: 0,
-    right: 0,
-    bottom: -1000,
+  actionButtons: {
+    gap: Spacing.md,
   },
-
-  /* 🔥 EDITOR */
-  editorBox: {
+  editorCard: {
+    marginBottom: Spacing.lg,
+    height: 280,
+  },
+  editorContainer: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: "#333",
-    borderRadius: 8,
-    overflow: "hidden",
   },
-
   editorFull: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: "#333",
   },
-
-  /* OUTPUT */
+  fullscreenHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.lg,
+    borderBottomWidth: 1,
+  },
+  fullscreenTitle: {
+    fontSize: FontSize.display,
+    fontWeight: FontWeight.bold,
+  },
+  outputCard: {
+    marginBottom: Spacing.xl,
+  },
   outputTitle: {
-    fontWeight: "bold",
-    marginTop: 10,
+    fontSize: FontSize.md,
+    fontWeight: FontWeight.semibold,
+    marginBottom: Spacing.md,
   },
-
-  output: {
-    color: "green",
+  outputBox: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    minHeight: 100,
+    maxHeight: 300,
+  },
+  outputText: {
+    fontSize: FontSize.sm,
+    fontFamily: "monospace",
+    lineHeight: FontSize.sm * 1.5,
+  },
+  loadingContainer: {
+    alignItems: "center",
+    paddingVertical: Spacing.xxl,
   },
 });

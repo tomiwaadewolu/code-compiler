@@ -23,6 +23,11 @@ export default function CodeEditor({ code, language, onChange }: Props) {
       height: 100%;
       width: 100%;
       overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    }
+    
+    body {
+      background: #0D1117;
     }
   </style>
 </head>
@@ -36,15 +41,59 @@ export default function CodeEditor({ code, language, onChange }: Props) {
     let editor;
     let isUpdatingFromRN = false;
 
+    // Define custom theme for modern look
     require(['vs/editor/editor.main'], function () {
+      monaco.editor.defineTheme('modern-dark', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [
+          { token: 'comment', foreground: '8B949E' },
+          { token: 'string', foreground: '79C0FF' },
+          { token: 'number', foreground: '79C0FF' },
+          { token: 'keyword', foreground: 'FF7B72' },
+          { token: 'type', foreground: 'FFB657' },
+          { token: 'variable', foreground: 'C9D1D9' },
+        ],
+        colors: {
+          'editor.background': '#0D1117',
+          'editor.foreground': '#E6EDF3',
+          'editor.lineNumbersBackground': '#010409',
+          'editor.lineNumbersForeground': '#30363D',
+          'editor.selectionBackground': '#388BFD33',
+          'editor.lineHighlightBackground': '#161B2204',
+          'editor.wordHighlightBackground': '#388BFD22',
+          'editor.findMatchBackground': '#388BFD66',
+          'editorCursor.foreground': '#58A6FF',
+          'editorIndentGuide.background': '#30363D',
+          'editorIndentGuide.activeBackground': '#30363D',
+        }
+      });
 
       editor = monaco.editor.create(document.getElementById('container'), {
         value: "",
         language: "${language}",
-        theme: "vs-dark",
+        theme: "modern-dark",
         automaticLayout: true,
         fontSize: 14,
-        minimap: { enabled: false }
+        fontFamily: "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace",
+        fontLigatures: true,
+        minimap: { enabled: false },
+        lineNumbers: 'on',
+        scrollBeyondLastLine: false,
+        wordWrap: 'on',
+        wrappingIndent: 'indent',
+        padding: { top: 16, bottom: 16 },
+        smoothScrolling: true,
+        cursorBlinking: 'blink',
+        renderLineHighlight: 'gutter',
+        suggestOnTriggerCharacters: true,
+        quickSuggestions: {
+          other: true,
+          comments: false,
+          strings: false
+        },
+        formatOnPaste: true,
+        formatOnType: true
       });
 
       // Send changes to React Native
