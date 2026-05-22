@@ -114,7 +114,6 @@ code-compiler/
   server/        # Express backend (Judge0 integration)
   web/           # React web IDE
   mobile/        # Expo React Native mobile IDE
-  public/        # Web static assets
   README.md
   .gitignore
 ```
