@@ -1,6 +1,6 @@
 /**
  * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * There are many other ways to style your app. For example, [Nativewind](https://nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
 import '@/global.css';
@@ -9,36 +9,36 @@ import { Platform } from 'react-native';
 
 export const Colors = {
   light: {
-    text: '#0F1117',
-    background: '#FFFFFF',
-    backgroundElement: '#F6F8FB',
-    backgroundSelected: '#EAEEF2',
-    textSecondary: '#57606A',
-    accent: '#0969DA',
-    accentLight: '#54AEFF',
-    success: '#1a7f16',
-    successLight: '#2da44e',
-    warning: '#d29922',
-    error: '#d1242f',
-    border: '#D0D7DE',
-    borderLight: '#EAEEF2',
-    shadowColor: 'rgba(9, 105, 218, 0.1)',
+    text: '#24152F',
+    background: '#FAF5FF',
+    backgroundElement: '#FFFFFF',
+    backgroundSelected: '#F5EBFF',
+    textSecondary: '#674F7A',
+    accent: '#9B4DCA',
+    accentLight: '#BE71E3',
+    success: '#1A7F16',
+    successLight: '#2DA44E',
+    warning: '#D29922',
+    error: '#D1242F',
+    border: '#EADCF6',
+    borderLight: '#F7EDFF',
+    shadowColor: 'rgba(155, 77, 202, 0.12)',
   },
   dark: {
-    text: '#E6EDF3',
-    background: '#0D1117',
-    backgroundElement: '#161B22',
-    backgroundSelected: '#21262D',
-    textSecondary: '#8B949E',
-    accent: '#58A6FF',
-    accentLight: '#79C0FF',
-    success: '#3fb950',
-    successLight: '#56d364',
-    warning: '#d29922',
-    error: '#f85149',
-    border: '#30363D',
-    borderLight: '#21262D',
-    shadowColor: 'rgba(88, 166, 255, 0.1)',
+    text: '#F8F1FF',
+    background: '#130D1A',
+    backgroundElement: '#20142E',
+    backgroundSelected: '#2B1A3D',
+    textSecondary: '#B79FD6',
+    accent: '#BE71E3',
+    accentLight: '#D8A8F6',
+    success: '#3FB950',
+    successLight: '#56D364',
+    warning: '#D29922',
+    error: '#F85149',
+    border: '#3B2A4D',
+    borderLight: '#2B1A3D',
+    shadowColor: 'rgba(190, 113, 227, 0.16)',
   },
 } as const;
 
@@ -71,20 +71,20 @@ export const Fonts = Platform.select({
 
 export const Spacing = {
   xs: 2,
-  half: 2,     // backward compatibility
+  half: 2,
   sm: 4,
-  one: 4,      // backward compatibility
+  one: 4,
   md: 8,
-  two: 8,      // backward compatibility
+  two: 8,
   lg: 16,
-  three: 16,   // backward compatibility
+  three: 16,
   xl: 24,
-  four: 24,    // backward compatibility
+  four: 24,
   xxl: 32,
-  five: 32,    // backward compatibility
+  five: 32,
   xxxl: 48,
   huge: 64,
-  six: 64,     // backward compatibility
+  six: 64,
 } as const;
 
 export const BorderRadius = {

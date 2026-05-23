@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Editor } from '@monaco-editor/react'; // Monaco Editor
+import { Editor } from '@monaco-editor/react';
 import axios from 'axios';
 
 const defaultCode = {
@@ -12,105 +12,136 @@ const defaultCode = {
 
 
 function App() {
-  // State to store code, language, input, and results
-  const [code, setCode] = useState(defaultCode['python']);
+  const [code, setCode] = useState(defaultCode.python);
   const [language, setLanguage] = useState('python');
   const [input, setInput] = useState('');
-  const [output, setOutput] = useState('');
+  const [output, setOutput] = useState('Your compiled output will appear here.');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Function to handle language change
   const handleLanguageChange = (event) => {
     const selectedLang = event.target.value;
     setLanguage(selectedLang);
     setCode(defaultCode[selectedLang]);
-
-    // Set default code only if code editor is empty
-    if (!code.trim()) {
-      setCode(defaultCode[selectedLang]);
-    }
   };
 
-  // Function to handle the submit (compile) action
   const submitCode = async () => {
-    // Check if code is empty
     if (!code.trim()) {
-      setOutput("⚠️ No code in the editor.\n⚠️ Please write code or select a language to load default code.");
+      setOutput('⚠️ No code in the editor. Please write code or select a language to load the starter snippet.');
       return;
     }
 
-    setIsLoading(true); // Start loading indicator
+    setIsLoading(true);
 
     try {
-      console.log('Sending request to backend...');
       const response = await axios.post('http://localhost:8000/compile', {
-        code: code,
-        language: language,
-        input: input,
+        code,
+        language,
+        input,
       });
 
-      console.log('Response received:', response.data);
-      setOutput(response.data.output || response.data.error); // Set the output from the response
+      setOutput(response.data.output || response.data.error);
     } catch (error) {
-      console.error("Error compiling code:", error);
       setOutput('Error compiling code: ' + error.message);
     } finally {
-      setIsLoading(false); // Stop loading indicator
+      setIsLoading(false);
     }
   };
 
-
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Code Compiler</h1>
-      </header>
-
-      {/* Language Selector at the Top */}
-      <div className="language-selector-container">
-        <select value={language} onChange={handleLanguageChange}>
-          <option value="python">Python</option>
-          <option value="java">Java</option>
-          <option value="c">C</option>
-          <option value="cpp">C++</option>
-        </select>
-      </div>
-
-      <div className="main-container">
-        {/* Left container: Code Editor */}
-        <div className="code-editor-container">
-          <Editor
-            height="100%"
-            language={language}
-            value={code}
-            onChange={(value) => setCode(value)}
-          />
-        </div>
-
-        {/* Right container: Split between Input & Output */}
-        <div className="right-container">
-          {/* Input Container */}
-          <div className="input-container">
-            <textarea
-              placeholder="Enter input here..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              style={{ width: '100%', height: '100%', padding: '10px' }}
-            />
+      <div className="App-shell">
+        <section className="hero-panel">
+          <div>
+            <p className="eyebrow">Code Compiler</p>
+            <h1>Modern coding, wrapped in a cleaner workspace.</h1>
+            <p className="subtitle">
+              A streamlined editor layout with smoother spacing, sharper controls, and a polished visual system.
+            </p>
           </div>
 
-          {/* Output Container */}
-          <div className="output-container">
-            <h4>Output:</h4>
-            <pre>{output}</pre>
+          <div className="hero-controls">
+            <label className="control-label" htmlFor="language-select">
+              Language
+            </label>
+            <select
+              id="language-select"
+              value={language}
+              onChange={handleLanguageChange}
+              className="language-select"
+            >
+              <option value="python">Python</option>
+              <option value="java">Java</option>
+              <option value="c">C</option>
+              <option value="cpp">C++</option>
+            </select>
           </div>
+        </section>
+
+        <section className="workspace-grid">
+          <div className="editor-panel">
+            <div className="panel-heading">
+              <div>
+                <p className="panel-kicker">Editor</p>
+                <h2>Code canvas</h2>
+              </div>
+              <span className="status-pill">Live</span>
+            </div>
+
+            <div className="editor-frame">
+              <Editor
+                height="100%"
+                language={language}
+                value={code}
+                onChange={(value) => setCode(value ?? '')}
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 14,
+                  padding: { top: 18, bottom: 18 },
+                  automaticLayout: true,
+                  scrollBeyondLastLine: false,
+                  roundedSelection: true,
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="side-panel">
+            <div className="input-panel">
+              <div className="panel-heading">
+                <div>
+                  <p className="panel-kicker">Input</p>
+                  <h2>Runtime input</h2>
+                </div>
+              </div>
+
+              <textarea
+                className="input-area"
+                placeholder="Enter stdin here..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+              />
+            </div>
+
+            <div className="output-panel">
+              <div className="panel-heading">
+                <div>
+                  <p className="panel-kicker">Output</p>
+                  <h2>Results</h2>
+                </div>
+              </div>
+
+              <pre className="output-area">{output}</pre>
+            </div>
+          </div>
+        </section>
+
+        <div className="footer-row">
+          <p className="footer-note">Use the polished workspace to test snippets.</p>
+          <button className="compile-button" onClick={submitCode} disabled={isLoading}>
+            {isLoading ? 'Compiling…' : 'Compile code'}
+          </button>
         </div>
       </div>
-
-      {/* Compile Button */}
-      <button onClick={submitCode} disabled={isLoading} style={{ marginTop: '20px' }}>
-        {isLoading ? 'Compiling...' : 'Compile Code'}
-      </button>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { WebView } from "react-native-webview";
 
 type Props = {
@@ -9,6 +9,16 @@ type Props = {
 
 export default function CodeEditor({ code, language, onChange }: Props) {
   const webRef = useRef<WebView>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+
+    webRef.current?.postMessage(JSON.stringify({ type: "setCode", value: code }));
+    webRef.current?.postMessage(JSON.stringify({ type: "setLanguage", value: language }));
+  }, [code, language, isReady]);
 
   const html = `
 <!DOCTYPE html>
@@ -23,11 +33,8 @@ export default function CodeEditor({ code, language, onChange }: Props) {
       height: 100%;
       width: 100%;
       overflow: hidden;
+      background: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    }
-    
-    body {
-      background: #0D1117;
     }
   </style>
 </head>
@@ -41,38 +48,37 @@ export default function CodeEditor({ code, language, onChange }: Props) {
     let editor;
     let isUpdatingFromRN = false;
 
-    // Define custom theme for modern look
     require(['vs/editor/editor.main'], function () {
-      monaco.editor.defineTheme('modern-dark', {
-        base: 'vs-dark',
+      monaco.editor.defineTheme('modern-light', {
+        base: 'vs',
         inherit: true,
         rules: [
-          { token: 'comment', foreground: '8B949E' },
-          { token: 'string', foreground: '79C0FF' },
-          { token: 'number', foreground: '79C0FF' },
-          { token: 'keyword', foreground: 'FF7B72' },
-          { token: 'type', foreground: 'FFB657' },
-          { token: 'variable', foreground: 'C9D1D9' },
+          { token: 'comment', foreground: '6A6A6A' },
+          { token: 'string', foreground: '0167B8' },
+          { token: 'number', foreground: '0167B8' },
+          { token: 'keyword', foreground: '9B4DCA' },
+          { token: 'type', foreground: '7C3BAC' },
+          { token: 'variable', foreground: '24152F' },
         ],
         colors: {
-          'editor.background': '#0D1117',
-          'editor.foreground': '#E6EDF3',
-          'editor.lineNumbersBackground': '#010409',
-          'editor.lineNumbersForeground': '#30363D',
-          'editor.selectionBackground': '#388BFD33',
-          'editor.lineHighlightBackground': '#161B2204',
-          'editor.wordHighlightBackground': '#388BFD22',
-          'editor.findMatchBackground': '#388BFD66',
-          'editorCursor.foreground': '#58A6FF',
-          'editorIndentGuide.background': '#30363D',
-          'editorIndentGuide.activeBackground': '#30363D',
+          'editor.background': '#FFFFFF',
+          'editor.foreground': '#24152F',
+          'editor.lineNumbersBackground': '#FCF9FF',
+          'editor.lineNumbersForeground': '#9A87B0',
+          'editor.selectionBackground': '#F1E5FF',
+          'editor.lineHighlightBackground': '#F8F1FF',
+          'editor.wordHighlightBackground': '#F3E5FF',
+          'editor.findMatchBackground': '#E9D8FF',
+          'editorCursor.foreground': '#9B4DCA',
+          'editorIndentGuide.background': '#EADCF6',
+          'editorIndentGuide.activeBackground': '#D9BEF0',
         }
       });
 
       editor = monaco.editor.create(document.getElementById('container'), {
-        value: "",
-        language: "${language}",
-        theme: "modern-dark",
+        value: ${JSON.stringify(code)},
+        language: ${JSON.stringify(language)},
+        theme: 'modern-light',
         automaticLayout: true,
         fontSize: 14,
         fontFamily: "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace",
@@ -90,44 +96,40 @@ export default function CodeEditor({ code, language, onChange }: Props) {
         quickSuggestions: {
           other: true,
           comments: false,
-          strings: false
+          strings: false,
         },
         formatOnPaste: true,
-        formatOnType: true
+        formatOnType: true,
       });
 
-      // Send changes to React Native
       editor.onDidChangeModelContent(() => {
-        if (isUpdatingFromRN) return;
+        if (isUpdatingFromRN) {
+          return;
+        }
 
         window.ReactNativeWebView.postMessage(
           JSON.stringify({
-            type: "codeChange",
-            value: editor.getValue()
+            type: 'codeChange',
+            value: editor.getValue(),
           })
         );
       });
 
-      // Receive updates from React Native
-      window.addEventListener("message", (event) => {
-        const msg = JSON.parse(event.data || "{}");
+      window.addEventListener('message', (event) => {
+        const msg = JSON.parse(event.data || '{}');
 
-        if (msg.type === "setCode") {
-          if (editor) {
-            const current = editor.getValue();
+        if (msg.type === 'setCode' && editor) {
+          const current = editor.getValue();
 
-            if (current !== msg.value) {
-              isUpdatingFromRN = true;
-              editor.setValue(msg.value);
-              isUpdatingFromRN = false;
-            }
+          if (current !== msg.value) {
+            isUpdatingFromRN = true;
+            editor.setValue(msg.value);
+            isUpdatingFromRN = false;
           }
         }
 
-        if (msg.type === "setLanguage") {
-          if (editor && editor.getModel()) {
-            monaco.editor.setModelLanguage(editor.getModel(), msg.value);
-          }
+        if (msg.type === 'setLanguage' && editor && editor.getModel()) {
+          monaco.editor.setModelLanguage(editor.getModel(), msg.value);
         }
       });
     });
@@ -150,13 +152,11 @@ export default function CodeEditor({ code, language, onChange }: Props) {
           if (msg.type === "codeChange") {
             onChange(msg.value);
           }
-        } catch (e) {}
+        } catch (e) {
+          // no-op
+        }
       }}
-      onLoadEnd={() => {
-        webRef.current?.postMessage(
-          JSON.stringify({ type: "setCode", value: code })
-        );
-      }}
+      onLoadEnd={() => setIsReady(true)}
       style={{ flex: 1 }}
     />
   );

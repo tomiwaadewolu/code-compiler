@@ -1,135 +1,237 @@
-/* General Styles */ 
 .App {
-  text-align: center;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 24px;
+  color: #24152f;
+  background:
+    radial-gradient(circle at top left, rgba(155, 77, 202, 0.2), transparent 30%),
+    linear-gradient(180deg, #f7f1fb 0%, #f3ecfa 42%, #f9f6fc 100%);
+}
+
+.App-shell {
+  max-width: 1400px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  background-color: #f0f0f0; /* Light grey background */
+  gap: 20px;
 }
 
-.App-header {
-  background-color: #9b4dca; /* Purple header */
-  padding: 1px; /* Reduced padding to make the header smaller */
-  color: white;
-  font-size: 15px; /* Reduced font size for a smaller header */
-}
-
-.language-selector-container {
-  margin-top: 5px;
-  margin-bottom: 5px; /* Added margin-bottom to create space below the language selector */
+.hero-panel {
   display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: end;
+  padding: 28px 30px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(155, 77, 202, 0.94), rgba(190, 113, 227, 0.88));
+  color: #ffffff;
+  box-shadow: 0 24px 60px rgba(85, 46, 115, 0.2);
+}
+
+.eyebrow,
+.panel-kicker {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+.hero-panel h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 2vw + 1rem, 2.3rem);
+  color: #ffffff;
+}
+
+.subtitle {
+  max-width: 700px;
+  margin: 12px 0 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-controls {
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.language-select {
+  background: rgba(255, 255, 255, 0.96);
+  color: #4b2168;
+  border: 0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  outline: none;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.9fr;
+  gap: 20px;
+}
+
+.editor-panel,
+.input-panel,
+.output-panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(155, 77, 202, 0.12);
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 18px 40px rgba(97, 53, 125, 0.08);
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.panel-heading h2 {
+  margin: 0;
+  font-size: 1.08rem;
+  color: #342044;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(155, 77, 202, 0.14);
+  color: #7c3bac;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
-.language-selector-container select {
-  padding: 5px 10px;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #f7d8eb; /* Light pink background for the selector */
-  color: #9b4dca; /* Purple text */
-  border: 1px solid #9b4dca; /* Purple border */
-  transition: border-color 0.3s ease;
+.editor-frame {
+  height: 640px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(155, 77, 202, 0.12);
 }
 
-.language-selector-container select:hover {
-  border-color: #c774e3; /* Lighter purple hover border */
-}
-
-/* Main Layout */
-.main-container {
-  display: flex;
-  height: calc(100vh - 160px); /* Subtract the header height and selector area */
-}
-
-.code-editor-container {
-  flex: 60%; /* 50% width for the code editor */
-  height: 100%;
-  background-color: #ffffff; /* White background for editor */
-}
-
-.right-container {
+.side-panel {
   display: flex;
   flex-direction: column;
-  flex: 40%; /* 50% width for the input/output area */
+  gap: 20px;
 }
 
-.input-container {
-  flex: 1; /* Takes 50% of the right side */
-  background-color: #f7d8eb; /* Light pink background */
-  padding: 15px;
-  color: #9b4dca; /* Purple text */
-  border-bottom: 2px solid #9b4dca; /* Added bottom border */
+.input-panel,
+.output-panel {
+  min-height: 280px;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center the input box vertically */
-  align-items: center; /* Center horizontally */
 }
 
-.input-box {
-  width: 90%;
-  background-color: #ffffff; /* White background for contrast */
-  border: 2px solid #9b4dca; /* Purple border */
-  padding: 10px;
-  border-radius: 5px; /* Rounded corners */
-}
-
-.input-box textarea {
+.input-area,
+.output-area {
   width: 100%;
-  height: 100px; /* Adjust height as needed */
-  background-color: #f0f0f0; /* Light grey background */
-  color: #9b4dca; /* Purple text */
-  border: none;
-  font-family: monospace;
-  padding: 10px;
-  resize: none;
-  outline: none; /* Removes default focus outline */
+  border: 0;
+  outline: none;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #faf6fd 0%, #f3ebf8 100%);
+  color: #342044;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  box-sizing: border-box;
 }
 
-
-.output-container {
-  flex: 1; /* 50% of the right side */
-  background-color: #f0f0f0; /* Light grey */
-  padding: 10px;
-  color: #9b4dca; /* Purple text */
-  overflow-y: auto;
-  font-family: monospace;
+.input-area {
+  flex: 1;
+  min-height: 200px;
+  padding: 16px;
+  resize: vertical;
 }
 
-/* Compile Button */
-button {
+.output-area {
+  margin: 0;
+  padding: 16px;
+  min-height: 220px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+}
+
+.footer-row {
   display: flex;
-  justify-content: center;
-  align-items: center; /* Ensures text inside is centered */
-  margin: 10px auto; /* Centers the button horizontally */
-  padding: 5px 10px; /* Adjusted to match the language selector's padding */
-  font-size: 14px; /* Matching the font size of the language selector */
-  background-color: #9b4dca; /* Purple button */
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 6px; /* Increased to make it more rounded */
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 6px 0;
+}
+
+.footer-note {
+  margin: 0;
+  color: #5c476d;
+  font-size: 0.96rem;
+}
+
+.compile-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 24px;
+  min-width: 180px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, #9b4dca, #7f36b7);
+  box-shadow: 0 14px 26px rgba(123, 57, 180, 0.28);
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 15%; /* Keeps the width relative */
-  min-width: 120px; /* Ensures consistency in size */
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
-button:hover {
-  background-color: #7a3fa1; /* Darker purple on hover */
+.compile-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 28px rgba(123, 57, 180, 0.32);
+  filter: brightness(1.02);
 }
 
-button:disabled {
-  background-color: #b3b3b3;
+.compile-button:disabled {
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
+@media (max-width: 1080px) {
+  .workspace-grid {
+    grid-template-columns: 1fr;
+  }
 
-/* Heading */
-h4 {
-  color: #9b4dca; /* Purple output heading */
+  .editor-frame {
+    height: 520px;
+  }
 }
 
-h1 {
-  color: #ffffff; /* White heading text */
+@media (max-width: 760px) {
+  .App {
+    padding: 16px;
+  }
+
+  .hero-panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .compile-button {
+    width: 100%;
+  }
 }
